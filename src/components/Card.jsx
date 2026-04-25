@@ -2,15 +2,27 @@ import { motion } from 'framer-motion';
 import { CARD_CONFIG } from '../types';
 import * as Icons from 'lucide-react';
 import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
 
 export const Card = ({ card, isSelected, onClick, disabled, className, isFlipped = true }) => {
-  const config = CARD_CONFIG[card.type] || { label: 'Unknown', color: 'bg-gray-500', icon: 'HelpCircle' };
+  const config = CARD_CONFIG[card.type] || { label: 'Unknown', color: 'bg-muted', icon: 'HelpCircle' };
   const Icon = Icons[config.icon] || Icons.HelpCircle;
+
+  // Map our dynamic colors from the store/types to CSS classes or variables
+  const getCardColor = () => {
+    switch (card.type) {
+      case 'attack': return 'var(--accent)';
+      case 'targeted_attack': return '#80001a';
+      case 'skip': return 'var(--info)';
+      case 'defuse': return 'var(--success)';
+      case 'shuffle': return 'var(--purple)';
+      case 'see_future': return '#22d3ee';
+      case 'alter_future': return '#4f46e5';
+      case 'favor': return 'var(--warning)';
+      case 'nope': return '#f97316';
+      case 'exploding_kitten': return 'var(--accent)';
+      default: return 'var(--muted)';
+    }
+  };
 
   return (
     <motion.div
@@ -23,40 +35,46 @@ export const Card = ({ card, isSelected, onClick, disabled, className, isFlipped
       }}
       whileHover={!disabled && !isSelected ? { y: -10, scale: 1.02 } : {}}
       onClick={!disabled ? onClick : undefined}
-      className={cn(
-        "relative w-32 h-48 rounded-xl cursor-pointer flex-shrink-0 card-shadow overflow-hidden transition-all duration-300",
-        isSelected ? "ring-4 ring-white/30 shadow-[0_0_30px_rgba(255,255,255,0.2)]" : "hover:shadow-xl",
-        disabled && "opacity-50 cursor-not-allowed grayscale",
-        className
-      )}
+      className={clsx('card', isSelected && 'selected', disabled && 'disabled', className)}
+      style={{
+        borderColor: isSelected ? 'rgba(255,255,255,0.4)' : 'var(--glass-border)',
+        boxShadow: isSelected ? '0 0 30px rgba(255,255,255,0.2)' : 'none'
+      }}
     >
       {/* Front */}
-      <div className={cn(
-        "absolute inset-0 p-3 flex flex-col justify-between border border-white/20",
-        config.color
-      )}>
-        {/* Subtle Inner Glow */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent pointer-events-none" />
-        <div className="flex justify-between items-start">
-          <span className="text-[10px] font-bold uppercase tracking-wider opacity-80">{config.label}</span>
-          <Icon size={14} className="opacity-80" />
+      <div 
+        className="card-inner" 
+        style={{ backgroundColor: getCardColor() }}
+      >
+        <div className="card-glow" />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <span className="card-label">{config.label}</span>
+          <Icon size={14} style={{ opacity: 0.8 }} />
         </div>
         
-        <div className="flex-1 flex items-center justify-center">
-          <Icon size={40} strokeWidth={1.5} />
+        <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyCenter: 'center' }}>
+          <div style={{ margin: 'auto' }}>
+            <Icon size={40} strokeWidth={1.5} />
+          </div>
         </div>
 
-        <div className="text-[10px] font-medium leading-tight opacity-90">
+        <div className="card-description">
           {getDescription(card.type)}
         </div>
       </div>
 
-      {/* Back (Hidden when flipped) */}
+      {/* Back */}
       {!isFlipped && (
-        <div className="absolute inset-0 bg-[#1A1A1A] border border-white/10 flex items-center justify-center">
-          <div className="w-16 h-16 rounded-full border-2 border-white/5 flex items-center justify-center">
-             <Icons.Flame size={32} className="text-white/20" />
-          </div>
+        <div style={{ 
+          position: 'absolute', 
+          inset: 0, 
+          backgroundColor: 'var(--card-bg)', 
+          border: '1px solid var(--glass-border)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}>
+           <Icons.Flame size={32} style={{ color: 'rgba(255,255,255,0.1)' }} />
         </div>
       )}
     </motion.div>

@@ -14,11 +14,43 @@ export const ActionPanel = ({ isVisible, onPlay, onCancel, selectedCards }) => {
           initial={{ y: 20, opacity: 0, x: '-50%' }}
           animate={{ y: 0, opacity: 1, x: '-50%' }}
           exit={{ y: 20, opacity: 0, x: '-50%' }}
-          className="fixed bottom-32 left-1/2 -translate-x-1/2 flex items-center gap-4 bg-white text-black p-2 pr-6 rounded-full shadow-2xl z-50"
+          style={{
+            position: 'fixed',
+            bottom: '8rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1rem',
+            backgroundColor: 'white',
+            color: 'black',
+            padding: '0.5rem',
+            paddingRight: '1.5rem',
+            borderRadius: '9999px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+            zIndex: 100
+          }}
         >
           <button
             onClick={onPlay}
-            className="flex items-center gap-2 bg-black text-white px-6 py-3 rounded-full font-bold uppercase text-xs tracking-widest hover:scale-105 active:scale-95 transition-transform"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              backgroundColor: 'black',
+              color: 'white',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '9999px',
+              fontWeight: 900,
+              textTransform: 'uppercase',
+              fontSize: '0.7rem',
+              letterSpacing: '0.1em',
+              cursor: 'pointer',
+              border: 'none',
+              transition: 'transform 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+            onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
           >
             <Play size={14} fill="currentColor" />
             {label}
@@ -26,7 +58,19 @@ export const ActionPanel = ({ isVisible, onPlay, onCancel, selectedCards }) => {
           
           <button
             onClick={onCancel}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            style={{
+              padding: '0.5rem',
+              borderRadius: '50%',
+              backgroundColor: 'transparent',
+              border: 'none',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'background-color 0.2s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.05)'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
           >
             <X size={20} />
           </button>

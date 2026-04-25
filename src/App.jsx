@@ -52,33 +52,33 @@ const App = () => {
 
   if (gameState === 'lobby') {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background overflow-hidden">
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center w-full max-w-md p-8"
+          style={{ textAlign: 'center', width: '100%', maxWidth: '400px', padding: '2rem' }}
         >
-          <div className="mb-12">
-             <Flame size={80} className="mx-auto text-accent mb-6" />
-             <h1 className="text-4xl font-black uppercase tracking-[0.2em]">Exploding</h1>
-             <h1 className="text-4xl font-black uppercase tracking-[0.2em] text-accent">Kittens</h1>
+          <div style={{ marginBottom: '3rem' }}>
+             <Flame size={80} style={{ margin: '0 auto 1.5rem', color: 'var(--accent)' }} />
+             <h1 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em' }}>Exploding</h1>
+             <h1 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', color: 'var(--accent)' }}>Kittens</h1>
           </div>
           
-          <div className="bg-white/5 p-8 rounded-3xl border border-white/10 mb-8">
-            <div className="flex items-center justify-between mb-6">
-              <span className="text-xs font-bold uppercase tracking-widest text-white/40">Players</span>
-              <div className="flex items-center gap-2 text-white">
+          <div style={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: '2rem', borderRadius: '2rem', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.4)' }}>Players</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'white' }}>
                 <Users size={16} />
-                <span className="font-mono text-xl">{playerCount}</span>
+                <span style={{ fontWeight: 'monospace', fontSize: '1.25rem' }}>{playerCount}</span>
               </div>
             </div>
             <input 
               type="range" min="2" max="10" 
               value={playerCount} 
               onChange={(e) => setPlayerCount(parseInt(e.target.value))}
-              className="w-full h-1 bg-white/10 rounded-lg appearance-none cursor-pointer accent-white mb-4"
+              style={{ width: '100%', height: '4px', borderRadius: '2px', cursor: 'pointer', marginBottom: '1rem' }}
             />
-            <div className="flex justify-between text-[10px] font-mono text-white/20">
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6rem', fontFamily: 'monospace', color: 'rgba(255,255,255,0.2)' }}>
               <span>2 Players</span>
               <span>10 Players</span>
             </div>
@@ -86,7 +86,8 @@ const App = () => {
 
           <button
             onClick={() => startGame(playerCount)}
-            className="w-full py-5 bg-accent text-white font-black uppercase tracking-[0.3em] text-sm rounded-full hover:scale-105 active:scale-95 transition-all shadow-xl shadow-accent/20 border border-white/10"
+            className="btn btn-primary"
+            style={{ width: '100%', padding: '1.25rem' }}
           >
             Start Game
           </button>
@@ -96,41 +97,58 @@ const App = () => {
   }
 
   return (
-    <div className="relative min-h-screen bg-background overflow-hidden font-sans">
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-success/5 rounded-full blur-[150px]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-info/[0.03] rounded-full blur-[120px]" />
+    <div className="app-container">
+      {/* Background Ambience */}
+      <div className="atmosphere">
+        <div className="glow-1" />
+        <div className="glow-2" />
+        <div style={{ 
+          position: 'absolute', 
+          top: '50%', 
+          left: '50%', 
+          transform: 'translate(-50%, -50%)', 
+          width: '800px', 
+          height: '800px', 
+          background: 'radial-gradient(circle, rgba(0, 204, 255, 0.03) 0%, transparent 70%)', 
+          filter: 'blur(120px)' 
+        }} />
       </div>
 
       <GameLog messages={gameLog} />
 
-      <div className="relative z-10 h-screen flex flex-col justify-between py-12">
-        <div className="px-12">
+      {/* Main Board */}
+      <div style={{ position: 'relative', zIndex: 10, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        {/* Top: Opponents */}
+        <div style={{ padding: '0 3rem' }}>
           <Opponents players={players} currentPlayerIndex={currentPlayerIndex} />
         </div>
 
-        <div className="flex flex-col items-center gap-12">
-          <div className="text-center">
-            <h2 className={`text-xs font-black uppercase tracking-[0.4em] mb-2 transition-colors ${
-              isUserTurn ? 'text-white' : 'text-white/20'
-            }`}>
+        {/* Center: Play Area */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem' }}>
+          {/* Turn Indicator */}
+          <div className="turn-indicator">
+            <h2 className={`turn-title ${isUserTurn ? 'active' : ''}`}>
               {isUserTurn ? "Your Turn" : `${players[currentPlayerIndex]?.name}'s Turn`}
             </h2>
-            <div className="flex items-center justify-center gap-2">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
               {[...Array(turnsRemaining)].map((_, i) => (
-                <div key={i} className="w-2 h-2 rounded-full bg-accent" />
+                <div key={i} style={{ width: '0.5rem', height: '0.5rem', borderRadius: '50%', backgroundColor: 'var(--accent)' }} />
               ))}
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-24">
-            <Deck count={deck.length} onDraw={drawCard} disabled={!isUserTurn || gameState !== 'playing'} />
+          <div className="deck-area">
+            <Deck 
+              count={deck.length} 
+              onDraw={drawCard} 
+              disabled={!isUserTurn || gameState !== 'playing'} 
+            />
             <DiscardPile cards={discardPile} />
           </div>
         </div>
 
-        <div className="relative">
+        {/* Bottom: Player Area */}
+        <div style={{ position: 'relative' }}>
            <PlayerHand 
              cards={userHand} 
              selectedCardIds={selectedCardIds}
@@ -140,7 +158,7 @@ const App = () => {
         </div>
       </div>
 
-      {/* Conditional UI based on game state */}
+      {/* Overlays */}
       <ActionPanel 
         isVisible={selectedCardIds.length > 0 && isUserTurn && gameState === 'playing'}
         selectedCards={selectedCards}
@@ -169,8 +187,8 @@ const App = () => {
 
       {/* Favor Response UI */}
       {gameState === 'favoring' && isUserTurn && (
-        <div className="fixed inset-0 z-[150] bg-black/90 flex flex-col items-center justify-center p-8">
-          <h2 className="text-xl font-black uppercase tracking-[0.3em] mb-8">Choose a card to give as a favor</h2>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 150, backgroundColor: 'rgba(0,0,0,0.9)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em', marginBottom: '2rem' }}>Choose a card to give as a favor</h2>
           <PlayerHand 
             cards={userHand}
             selectedCardIds={selectedCardIds.slice(0, 1)}
@@ -186,15 +204,15 @@ const App = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="fixed inset-0 z-[300] bg-black/90 backdrop-blur-md flex items-center justify-center p-8"
+            style={{ position: 'fixed', inset: 0, zIndex: 300, backgroundColor: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(10px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}
           >
-            <div className="max-w-md w-full text-center">
+            <div style={{ maxWidth: '400px', width: '100%', textAlign: 'center' }}>
               {winner === 'You' ? (
-                <><Trophy size={80} className="mx-auto text-success mb-6" /><h2 className="text-4xl font-black uppercase tracking-widest mb-4">Victory!</h2></>
+                <><Trophy size={80} style={{ margin: '0 auto 1.5rem', color: 'var(--success)' }} /><h2 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>Victory!</h2></>
               ) : (
-                <><Skull size={80} className="mx-auto text-accent mb-6" /><h2 className="text-4xl font-black uppercase tracking-widest mb-4">Defeat</h2><p className="text-white/40 mb-12">{winner} won the game.</p></>
+                <><Skull size={80} style={{ margin: '0 auto 1.5rem', color: 'var(--accent)' }} /><h2 style={{ fontSize: '2.5rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '1rem' }}>Defeat</h2><p style={{ color: 'rgba(255,255,255,0.4)', marginBottom: '3rem' }}>{winner} won the game.</p></>
               )}
-              <button onClick={() => useGameStore.setState({ gameState: 'lobby' })} className="w-full bg-white text-black font-black uppercase tracking-[0.3em] py-5 rounded-full hover:scale-105 transition-transform">Main Menu</button>
+              <button onClick={() => useGameStore.setState({ gameState: 'lobby' })} className="btn btn-primary" style={{ width: '100%', padding: '1.25rem' }}>Main Menu</button>
             </div>
           </motion.div>
         )}

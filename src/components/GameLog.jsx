@@ -2,8 +2,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const GameLog = ({ messages }) => {
   return (
-    <div className="absolute left-8 top-1/2 -translate-y-1/2 w-64 h-96 pointer-events-none overflow-hidden">
-      <div className="flex flex-col-reverse gap-2 h-full justify-start">
+    <div style={{
+      position: 'absolute',
+      left: '2rem',
+      top: '50%',
+      transform: 'translateY(-50%)',
+      width: '16rem',
+      height: '24rem',
+      pointerEvents: 'none',
+      overflow: 'hidden',
+      zIndex: 20
+    }}>
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column-reverse',
+        gap: '0.5rem',
+        height: '100%',
+        justifyContent: 'flex-start'
+      }}>
         <AnimatePresence initial={false}>
           {messages.slice(-8).reverse().map((msg, i) => (
             <motion.div
@@ -11,9 +27,20 @@ export const GameLog = ({ messages }) => {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1 - i * 0.1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="bg-white/5 backdrop-blur-md border border-white/5 p-3 rounded-lg text-[11px] font-medium leading-relaxed"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.05)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255,255,255,0.05)',
+                padding: '0.75rem',
+                borderRadius: '0.5rem',
+                fontSize: '0.7rem',
+                fontWeight: 500,
+                lineHeight: 1.4
+              }}
             >
-              <span className="text-white/40 mr-2 font-mono">[{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]</span>
+              <span style={{ color: 'rgba(255,255,255,0.4)', marginRight: '0.5rem', fontFamily: 'monospace' }}>
+                [{new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}]
+              </span>
               {msg}
             </motion.div>
           ))}

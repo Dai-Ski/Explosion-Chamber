@@ -3,8 +3,18 @@ import { Card } from './Card';
 
 export const PlayerHand = ({ cards, selectedCardIds, onCardClick, disabled }) => {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 py-8">
-      <div className="flex justify-center -space-x-8 hover:space-x-2 transition-all duration-500 overflow-x-auto no-scrollbar pb-12 pt-8 px-12">
+    <div className="player-hand-container">
+      <div 
+        className="hand-scroll"
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          overflowX: 'auto',
+          padding: '2rem 1rem',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
+        }}
+      >
         <AnimatePresence mode="popLayout">
           {cards.map((card, index) => (
             <motion.div
@@ -14,6 +24,10 @@ export const PlayerHand = ({ cards, selectedCardIds, onCardClick, disabled }) =>
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ type: 'spring', delay: index * 0.05 }}
+              style={{
+                marginLeft: index === 0 ? 0 : '-2rem',
+                zIndex: index
+              }}
             >
               <Card
                 card={card}
@@ -27,7 +41,15 @@ export const PlayerHand = ({ cards, selectedCardIds, onCardClick, disabled }) =>
       </div>
       
       {cards.length === 0 && (
-        <div className="text-center text-white/20 text-sm font-medium uppercase tracking-widest py-12">
+        <div style={{
+          textAlign: 'center',
+          color: 'rgba(255,255,255,0.1)',
+          fontSize: '0.8rem',
+          fontWeight: 500,
+          textTransform: 'uppercase',
+          letterSpacing: '0.2em',
+          padding: '3rem 0'
+        }}>
           Your hand is empty
         </div>
       )}

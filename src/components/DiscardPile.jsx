@@ -5,9 +5,24 @@ export const DiscardPile = ({ cards }) => {
   const topCard = cards[0];
 
   return (
-    <div className="relative w-32 h-48">
-      <div className="absolute inset-0 rounded-xl border-2 border-dashed border-white/10 flex items-center justify-center bg-white/5 shadow-[inset_0_0_20px_rgba(255,255,255,0.02)]">
-        <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Discard</span>
+    <div style={{ position: 'relative', width: '8rem', height: '12rem' }}>
+      <div style={{
+        position: 'absolute',
+        inset: 0,
+        borderRadius: '1rem',
+        border: '2px dashed rgba(255,255,255,0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(255,255,255,0.02)'
+      }}>
+        <span style={{
+          fontSize: '0.6rem',
+          fontWeight: 900,
+          color: 'rgba(255,255,255,0.1)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.2em'
+        }}>Discard</span>
       </div>
       
       <AnimatePresence mode="popLayout">
@@ -19,13 +34,21 @@ export const DiscardPile = ({ cards }) => {
             exit={{ scale: 1.2, opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 300 }}
           >
-            <Card card={topCard} disabled className="pointer-events-none" />
+            <Card card={topCard} disabled style={{ pointerEvents: 'none' }} />
           </motion.div>
         )}
       </AnimatePresence>
 
       {cards.length > 1 && (
-        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-mono text-white/20">
+        <div style={{
+          position: 'absolute',
+          bottom: '-1.5rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          fontSize: '0.6rem',
+          fontFamily: 'monospace',
+          color: 'rgba(255,255,255,0.2)'
+        }}>
           {cards.length} cards
         </div>
       )}

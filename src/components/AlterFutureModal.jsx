@@ -16,37 +16,53 @@ export const AlterFutureModal = ({ cards, onConfirm, isOpen }) => {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="fixed inset-0 z-[200] bg-background/95 backdrop-blur-md flex flex-col items-center justify-center"
+      style={{
+        position: 'fixed',
+        inset: 0,
+        zIndex: 200,
+        backgroundColor: 'rgba(5,5,5,0.95)',
+        backdropFilter: 'blur(10px)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
     >
-      <div className="flex flex-col items-center gap-12 max-w-5xl w-full">
-        <div className="flex items-center gap-4">
-          <Settings2 size={24} className="text-indigo-400" />
-          <h2 className="text-xl font-black uppercase tracking-[0.3em]">Alter the Future</h2>
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3rem', maxWidth: '1200px', width: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <Settings2 size={24} style={{ color: 'var(--info)' }} />
+          <h2 style={{ fontSize: '1.25rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.3em' }}>Alter the Future</h2>
         </div>
 
-        <p className="text-white/40 text-xs font-medium uppercase tracking-widest -mt-8">
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.2em', marginTop: '-1rem' }}>
           Drag cards to reorder. Top card is on the left.
         </p>
 
-        <Reorder.Group axis="x" values={items} onReorder={setItems} className="flex gap-6 p-8">
+        <Reorder.Group 
+          axis="x" 
+          values={items} 
+          onReorder={setItems} 
+          style={{ display: 'flex', gap: '1.5rem', padding: '2rem', listStyle: 'none' }}
+        >
           {items.map((card) => (
             <Reorder.Item
               key={card.id}
               value={card}
               whileDrag={{ scale: 1.1, rotate: 2 }}
-              className="relative cursor-grab active:cursor-grabbing group"
+              style={{ position: 'relative', cursor: 'grab' }}
             >
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <GripHorizontal className="text-white/20" />
+              <div style={{ position: 'absolute', top: '-2.5rem', left: '50%', transform: 'translateX(-50%)', opacity: 0.2 }}>
+                <GripHorizontal size={20} />
               </div>
-              <Card card={card} disabled className="pointer-events-none" />
+              <Card card={card} disabled style={{ pointerEvents: 'none' }} />
             </Reorder.Item>
           ))}
         </Reorder.Group>
 
         <button
           onClick={() => onConfirm(items)}
-          className="mt-8 bg-indigo-500 text-white px-16 py-5 rounded-full font-black uppercase text-xs tracking-[0.3em] hover:bg-indigo-400 hover:scale-105 active:scale-95 transition-all shadow-xl shadow-indigo-500/20"
+          className="btn btn-primary"
+          style={{ backgroundColor: 'var(--info)', marginTop: '2rem', padding: '1rem 4rem' }}
         >
           Save Order
         </button>

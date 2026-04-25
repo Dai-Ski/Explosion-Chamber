@@ -1,31 +1,206 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  :root {
-    color-scheme: dark;
-  }
-  body {
-    @apply bg-background text-primary antialiased;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  }
+:root {
+  --background: #050505;
+  --card-bg: #111111;
+  --primary: #ffffff;
+  --accent: #ff0033;
+  --success: #00ff66;
+  --warning: #ffcc00;
+  --info: #00ccff;
+  --purple: #cc00ff;
+  --muted: #2a2a2a;
+  --glass: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
 }
 
-@layer components {
-  .no-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-  .no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.card-shadow {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.05);
+body {
+  background-color: var(--background);
+  color: var(--primary);
+  font-family: 'Inter', -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
-.perspective-1000 {
-  perspective: 1000px;
+/* Layout Utilities */
+.app-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 0;
+}
+
+/* Background Atmosphere */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glow-1 {
+  position: absolute;
+  top: 0;
+  left: 25%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 0, 51, 0.1) 0%, transparent 70%);
+  filter: blur(80px);
+}
+
+.glow-2 {
+  position: absolute;
+  bottom: 0;
+  right: 25%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(0, 255, 102, 0.05) 0%, transparent 70%);
+  filter: blur(100px);
+}
+
+/* Card Styling */
+.card {
+  position: relative;
+  width: 8rem;
+  height: 12rem;
+  border-radius: 1rem;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--glass-border);
+}
+
+.card-inner {
+  position: absolute;
+  inset: 0;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.card-label {
+  font-size: 0.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+
+.card-description {
+  font-size: 0.6rem;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0.9;
+}
+
+/* Game Components */
+.deck-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6rem;
+}
+
+.draw-pile {
+  position: relative;
+  width: 8rem;
+  height: 12rem;
+  background: var(--card-bg);
+  border-radius: 1rem;
+  border: 2px solid var(--glass-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.draw-pile:hover {
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+}
+
+.player-hand-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hand-scroll {
+  display: flex;
+  justify-content: center;
+  gap: -2rem; /* Will handle overlap in JS or with negative margin */
+  padding-bottom: 2rem;
+}
+
+/* Buttons */
+.btn {
+  padding: 1rem 3rem;
+  border-radius: 9999px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  color: white;
+  box-shadow: 0 10px 20px rgba(255, 0, 51, 0.2);
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 30px rgba(255, 0, 51, 0.3);
+}
+
+/* Status Indicators */
+.turn-indicator {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.turn-title {
+  font-size: 0.6rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.2);
+  transition: color 0.3s ease;
+}
+
+.turn-title.active {
+  color: white;
+}
+
+/* Animation classes */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-glow {
+  animation: pulse-glow 2s infinite ease-in-out;
 }

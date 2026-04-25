@@ -9,12 +9,33 @@ export const TargetSelection = ({ players, currentPlayerId, onSelect, isOpen, ti
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[150] bg-black/80 backdrop-blur-md flex items-center justify-center p-8"
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 150,
+            backgroundColor: 'rgba(0,0,0,0.8)',
+            backdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '2rem'
+          }}
         >
-          <div className="max-w-4xl w-full text-center">
-            <h2 className="text-2xl font-black uppercase tracking-[0.3em] mb-12 text-white">{title || 'Select a Target'}</h2>
+          <div style={{ maxWidth: '1000px', width: '100%', textAlign: 'center' }}>
+            <h2 style={{ 
+              fontSize: '1.5rem', 
+              fontWeight: 900, 
+              textTransform: 'uppercase', 
+              letterSpacing: '0.3em', 
+              marginBottom: '3rem', 
+              color: 'white' 
+            }}>{title || 'Select a Target'}</h2>
             
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+            <div style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', 
+              gap: '1.5rem' 
+            }}>
               {players.map((player) => {
                 if (player.id === currentPlayerId || player.isEliminated) return null;
 
@@ -24,15 +45,36 @@ export const TargetSelection = ({ players, currentPlayerId, onSelect, isOpen, ti
                     whileHover={{ scale: 1.05, y: -5 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => onSelect(player.id)}
-                    className="flex flex-col items-center gap-4 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/30 transition-colors group"
+                    style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '1rem',
+                      padding: '1.5rem',
+                      borderRadius: '1rem',
+                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease',
+                      color: 'white'
+                    }}
                   >
-                    <div className="w-16 h-16 rounded-full bg-card border border-white/10 flex items-center justify-center group-hover:border-white/50 transition-colors">
-                      <User size={32} className="text-white/40 group-hover:text-white transition-colors" />
+                    <div style={{
+                      width: '4rem',
+                      height: '4rem',
+                      borderRadius: '50%',
+                      backgroundColor: 'var(--card-bg)',
+                      border: '1px solid var(--glass-border)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <User size={32} style={{ color: 'rgba(255,255,255,0.2)' }} />
                     </div>
-                    <span className="text-xs font-bold uppercase tracking-widest text-white/60 group-hover:text-white">
+                    <span style={{ fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
                       {player.name}
                     </span>
-                    <span className="text-[10px] font-mono text-white/20">
+                    <span style={{ fontSize: '0.6rem', fontFamily: 'monospace', color: 'rgba(255,255,255,0.2)' }}>
                       {player.hand.length} cards
                     </span>
                   </motion.button>
